@@ -1,6 +1,8 @@
 #include <bluefruit.h>
 #include <Retard.h>
 
+#define RED_LED 24
+
 BLEUart bleuart;
 Retard everyOne(INTERVAL_1S);
 
@@ -8,8 +10,8 @@ void setup() {
   Serial.begin(9600);
   while (/*!Serial || */millis() < 100); // !Serial freezes while usb port is open
 
-  pinMode(24, OUTPUT); // Red led on pin 24
-  digitalWrite(24, HIGH);
+  pinMode(RED_LED, OUTPUT); // Red led on pin 24
+  digitalWrite(RED_LED, HIGH);
 
   Bluefruit.autoConnLed(true);
   Bluefruit.configPrphBandwidth(BANDWIDTH_MAX);
@@ -43,9 +45,9 @@ void loop() {
   if (bleuart.available()) {
     Serial.print("Received:");
     while (bleuart.available()) {
-      uint8_t ch;
-      ch = (uint8_t) bleuart.read();
-      Serial.write(ch);
+      char c = (char) bleuart.read();
+      Serial.print(c);
+      if (c == 'a') digitalToggle(RED_LED);
     }
     Serial.println();
   }
