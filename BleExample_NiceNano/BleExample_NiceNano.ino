@@ -6,7 +6,7 @@ Retard everyOne(INTERVAL_1S);
 
 void setup() {
   Serial.begin(9600);
-  while (!Serial) yield();
+  while (/*!Serial || */millis() < 100); // !Serial freezes while usb port is open
 
   pinMode(24, OUTPUT); // Red led on pin 24
   digitalWrite(24, HIGH);
@@ -14,7 +14,7 @@ void setup() {
   Bluefruit.autoConnLed(true);
   Bluefruit.configPrphBandwidth(BANDWIDTH_MAX);
   Bluefruit.begin();
-  Bluefruit.setTxPower(8);
+  Bluefruit.setTxPower(8); // power in dbm
   Bluefruit.setName("BLE Lucas");
   Bluefruit.Periph.setConnectCallback(onConnected);
   Bluefruit.Periph.setDisconnectCallback(onDisconnect);
